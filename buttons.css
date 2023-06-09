@@ -47,16 +47,16 @@
     background: inherit;
   }
   
-  .ui-btn:hover, .ui-btn:focus {
+  .ui-btn:hover {
     background: var(--btn-hover-bg);
     transform: translate3d(0.5px, -0.5px, 0);
   }
   
-  .ui-btn:hover span, .ui-btn:focus span {
+  .ui-btn:hover span {
     color: var(--hover-btn-color);
   }
   
-  .ui-btn:hover span::before, .ui-btn:focus span::before {
+  .ui-btn:hover span::before{
     animation: chitchat linear both var(--btn-animation-duration);
   }
   
