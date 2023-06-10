@@ -21,7 +21,7 @@
         </button>
       </div>
 
-      <section class="list">
+      <section class="list-area tasks">
         <p class="title">Priority&#128680;</p>
         <div class="list-box priority"></div>
         <p class="title">Important&#x23F3;</p>
@@ -30,9 +30,17 @@
         <div class="list-box normal"></div>
       </section>
 
-      <section class="list">
+      <section class="list-area tasks-completed">
+        <div class="empty">
         <p class="title">Completed&#127942;</p>
+        <img class="bin" src="./images/bin.png" alt="bin">
+      </div>
         <div class="list-box completed"></div>
+      </section>
+
+      <section class="list-area delete">
+        <p class="info">Drag over to delete</p>
+        <div class="list-box tasks-delete"><img width="50" height="50" src="./images/delete.png" alt="trash can"></div>
       </section>
     </main>
   </body>
