@@ -6,42 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>to-do</title>
     <script src="./scripts.js" defer type="module"></script>
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="./buttons.css" />
+    <script type="module" src="./list-component.js" defer></script>
+    <script type="module" src="./list-component.button.js" defer></script>
+    <script type="module" src="./list-components.lists.js" defer></script>
+    <script type="module" src="./modal-component.js" defer></script>
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <p class="count">Tasks remaining: <input readonly value="0" /></p>
-    <div class="top">
-      <img src="./images/to-do.png" alt="to-do list" class="logo" />
-    </div>
-    <main>
-      <div class="button">
-        <button class="ui-btn">
-          <span> Add Task </span>
-        </button>
-      </div>
-
-      <section class="list-area tasks">
-        <p class="title">Priority&#128680;</p>
-        <div class="list-box priority"></div>
-        <p class="title">Important&#x23F3;</p>
-        <div class="list-box important"></div>
-        <p class="title">Normal&#x2615;</p>
-        <div class="list-box normal"></div>
-      </section>
-
-      <section class="list-area tasks-completed">
-        <div class="empty">
-        <p class="title">Completed&#127942;</p>
-        <img class="bin" src="./images/bin.png" alt="bin">
-      </div>
-        <div class="list-box completed"></div>
-      </section>
-
-      <section class="list-area delete">
-        <p class="info">Drag over to delete</p>
-        <div class="list-box tasks-delete"><img width="50" height="50" src="./images/delete.png" alt="trash can"></div>
-      </section>
-    </main>
+    <rendered-list></rendered-list>
   </body>
 </html>
