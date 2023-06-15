@@ -103,7 +103,7 @@ class CreateTasks extends LitElement {
 
   render() {
     return html`
-    <modal-form></modal-form>
+      <modal-form></modal-form>
       <section class="list-area tasks">
         <p class="title">Priority&#128680;</p>
         <div class="list-box priority"></div>
