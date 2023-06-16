@@ -1,4 +1,7 @@
 import { LitElement, html, css } from "./libs/lit.js";
+import { RATING, TYPES, createTaskObject, addTaskToState, State } from "./scripts.js";
+
+
 
 class CreateModal extends LitElement {
   static styles = css`
@@ -56,7 +59,6 @@ class CreateModal extends LitElement {
     }
 
     form {
-        color: 
       margin-top: 0.3rem;
       display: flex;
       flex-direction: column;
@@ -64,15 +66,22 @@ class CreateModal extends LitElement {
       font-family: Arial;
       font-weight: 300;
     }
+    
+    span{
+      color: rgb(105,105,125);
+    }
 
-    form input,
-    select {
+    input, select {
       margin-bottom: 5px;
       border-radius: 10px;
       border: none;
       outline: 0;
       padding: 0.35rem;
       cursor:pointer;
+    }
+    
+     input:hover, select:hover{
+      background-color: rgb(215,215,245);
     }
     
     .buttons{
@@ -125,32 +134,53 @@ class CreateModal extends LitElement {
     this.open = false;
     this.class = "";
   }
-
+  
   toggleOpen() {
     this.open = !this.open;
     this.class === "block" ? (this.class = "") : (this.class = "block");
   }
-
+  
+  closeHandler() {
+    const form = this.shadowRoot.querySelector('#add-form');
+    form.reset();
+    this.toggleOpen();
+  }
+  
+  submitHandler(e){
+    e.preventDefault()
+    const data = new FormData(e.target)
+    const formatData = Object.fromEntries(data)
+    const formatTaskData = createTaskObject(formatData)
+    addTaskToState(State, formatTaskData)
+    this.toggleOpen()
+    console.log(State)
+    e.target.reset() 
+  }
+  
   render() {
     return html`
       <add-button @click=${this.toggleOpen} class="button"></add-button>
       <div class=${this.class}></div>
       <dialog class="overlay" .open=${this.open}>
       <p class=title>Add a task</p>
-      <form>
+      <form id="add-form" @submit=${this.submitHandler}>
         <label>Task title</label>
         <input required name=title type=text>
         <label>Urgency</label>
-        <select required name=rating><select>
-        <label>Due date</label>
-        <input required name=due type=date>
-        <label>Type</label>
-        <select required name=rating><select>
+        <select required name=urgency>${Object.entries(RATING).map(
+          ([key, value]) => html` <option value="${key}">${value}</option> `
+        )}<select>
+        <label>Due date <span>(Optional)</span></label>
+        <input name=due type=date>
+        <label>Task type</label>
+        <select name=type >${Object.entries(TYPES).map(
+          ([key, value]) => html` <option value="${key}">${value}</option> `
+        )}<select>
             
         
         <div class=buttons>
-        <button @click=${this.toggleOpen} class="close button">Cancel</button>
-        <button class="save button" type=submit>Save</button>
+        <button @click=${this.closeHandler} class="close button">Cancel</button>
+        <button class="save button" type=submit form="add-form">Save</button>
   </div>
         
       </form></dialog>

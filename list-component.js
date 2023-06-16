@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "./libs/lit.js";
+import { State } from "./scripts.js";
 
+let count = 0;
 class CreateList extends LitElement {
   static styles = css`
     * {
@@ -58,11 +60,13 @@ class CreateList extends LitElement {
   `;
   static properties = {
     visible: { type: Boolean, state: false },
+    count: { type: Number },
   };
 
   constructor() {
     super();
     this.visible = true;
+    this.count = count;
   }
 
   toggleHidden() {
@@ -71,7 +75,7 @@ class CreateList extends LitElement {
 
   render() {
     return html`
-      <p class="count">Tasks remaining (${0})</p>
+      <p class="count">Tasks remaining (${this.count})</p>
       <div class="top">
         <img
           @click=${this.toggleHidden}
@@ -88,3 +92,5 @@ class CreateList extends LitElement {
 }
 
 customElements.define("rendered-list", CreateList);
+
+console.log(Object.keys(State).length);
