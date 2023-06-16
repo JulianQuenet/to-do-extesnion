@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "./libs/lit.js";
 import { State } from "./scripts.js";
 
-let count = 0;
+
 class CreateList extends LitElement {
   static styles = css`
     * {
@@ -60,19 +60,40 @@ class CreateList extends LitElement {
   `;
   static properties = {
     visible: { type: Boolean, state: false },
-    count: { type: Number },
+    state: { type: Object },
+    count: {type: Number}
   };
 
   constructor() {
     super();
     this.visible = true;
-    this.count = count;
+    this.count = 0
+  }
+  
+  connectedCallback() {
+    super.connectedCallback();
+    this.countState();
   }
 
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.stopCountState();
+  }
+
+  countState() {
+    this.intervalId = setInterval(() => {
+      this.count = Object.keys(State).length
+    }, 100);
+  }
+
+  stopCountState() {
+    clearInterval(this.intervalId);
+  }
+  
   toggleHidden() {
     this.visible = !this.visible;
   }
-
+  
   render() {
     return html`
       <p class="count">Tasks remaining (${this.count})</p>
@@ -93,4 +114,3 @@ class CreateList extends LitElement {
 
 customElements.define("rendered-list", CreateList);
 
-console.log(Object.keys(State).length);

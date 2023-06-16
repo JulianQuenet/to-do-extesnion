@@ -122,17 +122,23 @@ class CreateModal extends LitElement {
     }
     
     
+    #msg{
+      color:red;
+    }
+    
   `;
 
   static properties = {
     open: { type: Boolean, state: false },
     class: { type: String },
+    message: {type: String},
   };
 
   constructor() {
     super();
     this.open = false;
     this.class = "";
+    this.message = ""
   }
   
   toggleOpen() {
@@ -142,7 +148,7 @@ class CreateModal extends LitElement {
   
   closeHandler() {
     const form = this.shadowRoot.querySelector('#add-form');
-    form.reset();
+    form.reset()
     this.toggleOpen();
   }
   
@@ -150,6 +156,13 @@ class CreateModal extends LitElement {
     e.preventDefault()
     const data = new FormData(e.target)
     const formatData = Object.fromEntries(data)
+    if(formatData.title === ""){
+      this.message = "Required"
+      setTimeout(() => {
+        this.message = ''; // Reset the value to an empty string
+      }, 1000);
+      return
+    }
     const formatTaskData = createTaskObject(formatData)
     addTaskToState(State, formatTaskData)
     this.toggleOpen()
@@ -164,8 +177,8 @@ class CreateModal extends LitElement {
       <dialog class="overlay" .open=${this.open}>
       <p class=title>Add a task</p>
       <form id="add-form" @submit=${this.submitHandler}>
-        <label>Task title</label>
-        <input required name=title type=text>
+        <label>Task title <span id=msg>${this.message}</span></label>
+        <input name=title type=text >
         <label>Urgency</label>
         <select required name=urgency>${Object.entries(RATING).map(
           ([key, value]) => html` <option value="${key}">${value}</option> `
