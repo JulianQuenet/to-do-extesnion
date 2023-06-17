@@ -84,7 +84,10 @@ class CreateList extends LitElement {
 
   countState() {
     this.intervalId = setInterval(() => {
-      this.count = Object.keys(State).length
+      let ref = Object.entries(State).filter((task) => {
+        return task[1].completed === false 
+      })
+      this.count = ref.length
     }, 100);
   }
 

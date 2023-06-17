@@ -169,7 +169,6 @@ class CreateModal extends LitElement {
     const formatTaskData = createTaskObject(formatData)
     addTaskToState(State, formatTaskData)
     this.toggleOpen()
-    console.log(State)
     e.target.reset() 
   }
   

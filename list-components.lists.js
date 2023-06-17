@@ -3,7 +3,8 @@ import { html, LitElement, css } from "./libs/lit.js";
 import { State } from "./scripts.js";
 
 class CreateTasks extends LitElement {
-  static styles = css`
+  //CSS below -------------------------------------------------------------
+  static styles = css`                            
     * {
       box-sizing: border-box;
       padding: 0;
@@ -102,47 +103,72 @@ class CreateTasks extends LitElement {
       display: flex;
       justify-content: center;
     }
-    
-    .task-box{
+
+    .task-box {
       margin-top: 3px;
       padding: 0.3rem;
-      display:flex;
+      display: flex;
       align-items: center;
       background-color: rgb(233, 215, 215, 0.65);
       border-radius: 10px;
       justify-content: space-between;
     }
-    
-    .text{
-      display:flex;
+
+    .text {
+      display: flex;
       color: black;
       align-items: center;
     }
-    
-    .name{
-      display:flex;
+
+    .name {
+      display: flex;
       align-items: center;
-      flex-wrap:wrap;
-      margin-left:2px;
-      margin-right:2px;
+      flex-wrap: wrap;
+      margin-left: 2px;
+      margin-right: 2px;
       font-size: 0.7rem;
     }
-    
-    .due{
-      font-size: 0.6rem;
 
+    .due {
+      font-size: 0.6rem;
     }
-    
-    
-    .status{
+
+    .status {
+      display: flex;
+      align-items: center;
       font-size: 0.8rem;
     }
-    
-    
-  `;
 
-  static properties = {
-    state: { type: Set},
+    .status-button {
+      border: none;
+      margin-left: 1px;
+      background-color: darkorange;
+      cursor: pointer;
+      padding: 2px;
+      font-size: 0.65rem;
+      border-radius: 5px;
+    }
+
+    .status-button:hover {
+      filter: hue-rotate(60deg);
+    }
+
+    .status-button:disabled {
+      cursor: not-allowed;
+    }
+
+    .fin {
+      background: linear-gradient(45deg, #37c005, #2ea105);
+      filter: hue-rotate(60deg);
+      padding: 2px;
+      font-size: 0.65rem;
+      border-radius: 5px;
+      border: none;
+      margin-left: 1px;
+    }
+  `; //End of CSS-------------------------------------------------------------------
+
+  static properties = { 
     priority: { type: Array },
     important: { type: Array },
     normal: { type: Array },
@@ -151,25 +177,50 @@ class CreateTasks extends LitElement {
 
   constructor() {
     super();
-    this.state = new Set()
     this.priority = [];
     this.important = [];
     this.normal = [];
     this.completed = [];
   }
 
-  connectedCallback() {
+  connectedCallback() { //Runs when application is open
     super.connectedCallback();
     this.getState();
   }
 
-  getState() {
+  getState() { // Gets the relevant info from the state with the getUrgency function 
     this.intervalId = setInterval(() => {
-      this.priority = (this.getUrgency("priority"));
-      this.important = this.getUrgency("important");
-      this.normal = this.getUrgency("normal");
-    }, 300);
+      this.priority = this.getUrgency("priority"); // Function returns an element with relevant attributes
+      this.important = this.getUrgency("important"); //Check the get urgency func for reference or the example by
+      this.normal = this.getUrgency("normal"); // this.completed at the **
+
+      this.completed = Object.entries(State) //** 
+        .filter((task) => {
+          return task[1].completed === true;
+        })
+        .map((task) => {
+          const typeEmoji = document.createElement("div");
+          typeEmoji.innerHTML = task[1].type;
+
+          return html`<div id=${task[0]} class="task-box">
+            <div class="text">
+              ${typeEmoji}
+              <div class="name">${task[1].title}</div>
+            </div>
+            <div class="due">${task[1].due}</div>
+            <div class="status">
+              Completed:
+              <p class="fin">Jip</p>
+            </div>
+          </div>`;
+        });
+    }, 100); // Checks for changes every 0.1second
   }
+
+  taskCompleted = (e) => { // Gets the id of the task and updates the State on the tasks Status
+    const id = e.target.closest(".task-box").id;
+    State[id].completed = true;
+  };
 
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -180,30 +231,57 @@ class CreateTasks extends LitElement {
     clearInterval(this.intervalId);
   }
 
+  /**
+   * Filters out the needed tasks with the corresponding urgency represented by the string argument
+   * and only gets the tasks that have not been completed yet, if the filter returns something
+   * the function maps over the result and gets the corresponding values from the tasks and 
+   * create an element with the retrieved data.
+   * @param {String} string
+   * @returns
+   */
   getUrgency(string) {
-    let ref = Object.entries(State).filter((task) => {
-      return task[1].urgency === `${string}` 
-    }).map((task)=>{
-      const typeEmoji = document.createElement('div');
-       typeEmoji.innerHTML = task[1].type;
-      return html `<div class=task-box>
-        <div class=text>
-        ${typeEmoji}
-          <div class=name>${task[1].title}</div>
-        </div>
-        <div class=due>${task[1].due}</div>
-        <div class=status>Completed:</div>
-      </div>`
-    })
+    let ref = Object.entries(State)
+      .filter((task) => {
+        return task[1].urgency === `${string}` && task[1].completed === false;
+      })
+      .map((task) => {
+        const typeEmoji = document.createElement("div");
+        typeEmoji.innerHTML = task[1].type;
+
+        return html`<div id=${task[0]} class="task-box">
+          <div class="text">
+            ${typeEmoji}
+            <div class="name">${task[1].title}</div>
+          </div>
+          <div class="due">${task[1].due}</div>
+          <div class="status">
+            Completed:<button
+              @click=${this.taskCompleted}
+              class="status-button"
+            >
+              Nope
+            </button>
+          </div>
+        </div>`;
+      });
     return ref;
   }
 
-  
+  removeTasks(e) {//Gets all the id's of the tasks and removes it from the State
+    const box = e.target.closest(".tasks-completed");
+    const tasks = box.querySelectorAll("[id]");
+
+    tasks.forEach((task) => {
+      const id = task.getAttribute("id");
+      delete State[id];
+    });
+  }
+
   /**
-   * 
+   *
    * @returns {any}
    */
-  render() {
+  render() { //HTML below --------------------------------------------------------------
     return html` <modal-form></modal-form>
       <section class="list-area tasks">
         <p class="title">Priority&#128680;</p>
@@ -217,9 +295,14 @@ class CreateTasks extends LitElement {
       <section class="list-area tasks-completed">
         <div class="empty">
           <p class="title">Completed&#127942;</p>
-          <img class="bin" src="./images/bin.png" alt="bin" />
+          <img
+            @click=${this.removeTasks}
+            class="bin"
+            src="./images/bin.png"
+            alt="bin"
+          />
         </div>
-        <div class="list-box completed"></div>
+        <div class="list-box completed">${this.completed}</div>
       </section>
 
       <section class="list-area delete">
@@ -233,42 +316,7 @@ class CreateTasks extends LitElement {
           />
         </div>
       </section>`;
-  }
+  }//End of HTML------------------------------------------------------------------------------
 }
 
 customElements.define("tasks-add", CreateTasks);
-
-const refState = {
-  "98u98u98u": {
-    completed: false,
-    due: "No due date",
-    id: "63108931-ccd2-45c8-9aad-3898d81591f9",
-    title: "ghghhg",
-    type: "",
-    urgency: "priority",
-  },
-  "98u98u9ghgh8u": {
-    completed: false,
-    due: "No due date",
-    id: "63108931-ccd2-45c8-9aad-3898d81591f9",
-    title: "ghghhg",
-    type: "",
-    urgency: "important",
-  },
-  "98u98uddff98u": {
-    completed: false,
-    due: "No due date",
-    id: "63108931-ccd2-45c8-9aad-3898d81591f9",
-    title: "ghghhg",
-    type: "",
-    urgency: "normal",
-  },
-};
-
-const ref = Object.entries(refState).filter((task) => {
-  return task[1].urgency === "normal";
-}).map((task) => {
-  return task[0];
-});
-
-console.log(ref);
