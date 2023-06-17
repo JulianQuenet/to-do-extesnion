@@ -247,32 +247,7 @@ class CreateTasks extends LitElement {
     clearInterval(this.intervalId);
   }
 
-  startDrag(e) {
-    e.stopPropagation();
-    this.dragged = e.target;
-  }
-
-  dragging(e) {
-    e.preventDefault();
-    if (e.target.className === ".task-box") return;
-  }
-
-  stopDrag(e) {
-    if (e.target.className === "task-box") return;
-    e.target.style.outline = "";
-    const id = this.dragged.id;
-    State[id].urgency = e.target.id;
-  }
-
-  enter(e) {
-    if (e.target.className === "task-box") return;
-    e.target.style.outline = "solid 3px lightgreen";
-  }
-
-  leave(e) {
-    if (e.target.className === "task-box") return;
-    e.target.style.outline = "";
-  }
+ 
 
   /**
    * Filters out the needed tasks with the corresponding urgency represented by the string argument
@@ -314,8 +289,36 @@ class CreateTasks extends LitElement {
       });
     return ref;
   }
+  //All dragging events below----------------------------------------------------------------
+  startDrag(e) {
+    e.stopPropagation();
+    this.dragged = e.target;
+  }
 
-  dragDelete(e) {
+  dragging(e) {
+    e.preventDefault();
+    if (e.target.className === ".task-box") return;
+  }
+
+  stopDrag(e) {
+    if (e.target.className === "task-box") return;
+    e.target.style.outline = "";
+    const id = this.dragged.id;
+    State[id].urgency = e.target.id;
+  }
+
+  enter(e) {
+    if (e.target.className === "task-box") return;
+    e.target.style.outline = "solid 3px lightgreen";
+  }
+
+  leave(e) {
+    if (e.target.className === "task-box") return;
+    e.target.style.outline = "";
+  }
+  
+
+  dragDelete(e) { 
     if (e.target.className === "task-box") return;
     const id = this.dragged.id;
     delete State[id];
@@ -331,6 +334,7 @@ class CreateTasks extends LitElement {
     if (e.target.className === "task-box") return;
     e.target.style.outline = "";
   }
+  //End of dragging events --------------------------------------------------------------------------
 
   removeTasks(e) {
     //Gets all the id's of the tasks and removes it from the State
