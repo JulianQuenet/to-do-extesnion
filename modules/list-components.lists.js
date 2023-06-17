@@ -4,7 +4,7 @@ import { State } from "../scripts.js";
 
 class CreateTasks extends LitElement {
   //CSS below -------------------------------------------------------------
-  static styles = css`                            
+  static styles = css`
     * {
       box-sizing: border-box;
       padding: 0;
@@ -45,6 +45,7 @@ class CreateTasks extends LitElement {
       min-height: 50px;
       border-radius: 10px;
       padding: 3px;
+      padding-bottom: 1rem;
       margin-bottom: 5px;
     }
 
@@ -92,6 +93,10 @@ class CreateTasks extends LitElement {
       justify-content: center;
     }
 
+    .tasks-delete img {
+      z-index: -99;
+    }
+
     .info {
       font-family: "Courier New", Courier, monospace;
       font-weight: 300;
@@ -105,13 +110,14 @@ class CreateTasks extends LitElement {
     }
 
     .task-box {
-      margin-top: 3px;
+      margin: 3px;
       padding: 0.3rem;
       display: flex;
       align-items: center;
       background-color: rgb(233, 215, 215, 0.65);
       border-radius: 10px;
       justify-content: space-between;
+      cursor: grab;
     }
 
     .text {
@@ -166,13 +172,19 @@ class CreateTasks extends LitElement {
       border: none;
       margin-left: 1px;
     }
+
+    [draggable="true"] {
+      position: relative;
+      z-index: 1;
+    }
   `; //End of CSS-------------------------------------------------------------------
 
-  static properties = { 
+  static properties = {
     priority: { type: Array },
     important: { type: Array },
     normal: { type: Array },
     completed: { type: Array },
+    dragged: { type: HTMLElement },
   };
 
   constructor() {
@@ -181,20 +193,23 @@ class CreateTasks extends LitElement {
     this.important = [];
     this.normal = [];
     this.completed = [];
+    this.dragged = this.dragged;
   }
 
-  connectedCallback() { //Runs when application is open
+  connectedCallback() {
+    //Runs when application is open
     super.connectedCallback();
     this.getState();
   }
 
-  getState() { // Gets the relevant info from the state with the getUrgency function 
+  getState() {
+    // Gets the relevant info from the state with the getUrgency function
     this.intervalId = setInterval(() => {
       this.priority = this.getUrgency("priority"); // Function returns an element with relevant attributes
       this.important = this.getUrgency("important"); //Check the get urgency func for reference or the example by
       this.normal = this.getUrgency("normal"); // this.completed at the **
 
-      this.completed = Object.entries(State) //** 
+      this.completed = Object.entries(State) //**
         .filter((task) => {
           return task[1].completed === true;
         })
@@ -217,7 +232,8 @@ class CreateTasks extends LitElement {
     }, 100); // Checks for changes every 0.1second
   }
 
-  taskCompleted = (e) => { // Gets the id of the task and updates the State on the tasks Status
+  taskCompleted = (e) => {
+    // Gets the id of the task and updates the State on the tasks Status
     const id = e.target.closest(".task-box").id;
     State[id].completed = true;
   };
@@ -231,10 +247,37 @@ class CreateTasks extends LitElement {
     clearInterval(this.intervalId);
   }
 
+  startDrag(e) {
+    e.stopPropagation();
+    this.dragged = e.target;
+  }
+
+  dragging(e) {
+    e.preventDefault();
+    if (e.target.className === ".task-box") return;
+  }
+
+  stopDrag(e) {
+    if (e.target.className === "task-box") return;
+    e.target.style.outline = "";
+    const id = this.dragged.id;
+    State[id].urgency = e.target.id;
+  }
+
+  enter(e) {
+    if (e.target.className === "task-box") return;
+    e.target.style.outline = "solid 3px lightgreen";
+  }
+
+  leave(e) {
+    if (e.target.className === "task-box") return;
+    e.target.style.outline = "";
+  }
+
   /**
    * Filters out the needed tasks with the corresponding urgency represented by the string argument
    * and only gets the tasks that have not been completed yet, if the filter returns something
-   * the function maps over the result and gets the corresponding values from the tasks and 
+   * the function maps over the result and gets the corresponding values from the tasks and
    * create an element with the retrieved data.
    * @param {String} string
    * @returns
@@ -248,7 +291,12 @@ class CreateTasks extends LitElement {
         const typeEmoji = document.createElement("div");
         typeEmoji.innerHTML = task[1].type;
 
-        return html`<div id=${task[0]} class="task-box">
+        return html`<div
+          draggable=${true}
+          id=${task[0]}
+          class="task-box"
+          @dragstart=${this.startDrag}
+        >
           <div class="text">
             ${typeEmoji}
             <div class="name">${task[1].title}</div>
@@ -267,7 +315,25 @@ class CreateTasks extends LitElement {
     return ref;
   }
 
-  removeTasks(e) {//Gets all the id's of the tasks and removes it from the State
+  dragDelete(e) {
+    if (e.target.className === "task-box") return;
+    const id = this.dragged.id;
+    delete State[id];
+    e.target.style.outline = "";
+  }
+
+  enterDelete(e) {
+    if (e.target.className === "task-box") return;
+    e.target.style.outline = "solid 2px red";
+  }
+
+  leaveDelete(e) {
+    if (e.target.className === "task-box") return;
+    e.target.style.outline = "";
+  }
+
+  removeTasks(e) {
+    //Gets all the id's of the tasks and removes it from the State
     const box = e.target.closest(".tasks-completed");
     const tasks = box.querySelectorAll("[id]");
 
@@ -281,15 +347,43 @@ class CreateTasks extends LitElement {
    *
    * @returns {any}
    */
-  render() { //HTML below --------------------------------------------------------------
+  render() {
+    //HTML below --------------------------------------------------------------
     return html` <modal-form></modal-form>
       <section class="list-area tasks">
         <p class="title">Priority&#128680;</p>
-        <div class="list-box priority">${this.priority}</div>
+        <div
+          id="priority"
+          @dragover=${this.dragging}
+          @drop=${this.stopDrag}
+          @dragenter=${this.enter}
+          @dragleave=${this.leave}
+          class="list-box priority"
+        >
+          ${this.priority}
+        </div>
         <p class="title">Important&#x23F3;</p>
-        <div class="list-box important">${this.important}</div>
+        <div
+          id="important"
+          @dragover=${this.dragging}
+          @drop=${this.stopDrag}
+          @dragenter=${this.enter}
+          @dragleave=${this.leave}
+          class="list-box important"
+        >
+          ${this.important}
+        </div>
         <p class="title">Normal&#x2615;</p>
-        <div class="list-box normal">${this.normal}</div>
+        <div
+          id="normal"
+          @dragover=${this.dragging}
+          @drop=${this.stopDrag}
+          @dragenter=${this.enter}
+          @dragleave=${this.leave}
+          class="list-box normal"
+        >
+          ${this.normal}
+        </div>
       </section>
 
       <section class="list-area tasks-completed">
@@ -307,7 +401,13 @@ class CreateTasks extends LitElement {
 
       <section class="list-area delete">
         <p class="info">Drag over to delete</p>
-        <div class="list-box tasks-delete">
+        <div
+          @dragover=${this.dragging}
+          @dragenter=${this.enterDelete}
+          @dragleave=${this.leaveDelete}
+          @drop=${this.dragDelete}
+          class="list-box tasks-delete"
+        >
           <img
             width="50"
             height="50"
@@ -316,7 +416,7 @@ class CreateTasks extends LitElement {
           />
         </div>
       </section>`;
-  }//End of HTML------------------------------------------------------------------------------
+  } //End of HTML------------------------------------------------------------------------------
 }
 
 customElements.define("tasks-add", CreateTasks);
