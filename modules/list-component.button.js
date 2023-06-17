@@ -1,5 +1,5 @@
 //@ts-check
-import {LitElement, css, html} from './libs/lit.js'
+import {LitElement, css, html} from '../libs/lit.js'
 
 class CreateButton extends LitElement{
     static styles = css`.ui-btn {

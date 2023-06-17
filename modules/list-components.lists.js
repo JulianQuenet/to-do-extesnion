@@ -1,6 +1,6 @@
 //@ts-check
-import { html, LitElement, css } from "./libs/lit.js";
-import { State } from "./scripts.js";
+import { html, LitElement, css } from "../libs/lit.js";
+import { State } from "../scripts.js";
 
 class CreateTasks extends LitElement {
   //CSS below -------------------------------------------------------------

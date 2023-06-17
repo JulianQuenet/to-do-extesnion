@@ -1,7 +1,7 @@
 //@ts-check
 
-import { LitElement, html, css } from "./libs/lit.js";
-import { State } from "./scripts.js";
+import { LitElement, html, css } from "../libs/lit.js";
+import { State } from "../scripts.js";
 
 
 class CreateList extends LitElement {

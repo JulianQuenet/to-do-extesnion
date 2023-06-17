@@ -1,6 +1,6 @@
 //@ts-check
-import { LitElement, html, css } from "./libs/lit.js";
-import { RATING, TYPES, createTaskObject, addTaskToState, State, getNode } from "./scripts.js";
+import { LitElement, html, css } from "../libs/lit.js";
+import { RATING, TYPES, createTaskObject, addTaskToState, State, getNode } from "../scripts.js";
 
 
 class CreateModal extends LitElement {
