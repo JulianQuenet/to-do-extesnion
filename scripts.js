@@ -1,3 +1,5 @@
+//@ts-check
+
 export const RATING = {
   priority: "High",
   important: "Medium",
@@ -16,6 +18,10 @@ export const TYPES = {
   "&#9889;": "5-min",
 };
 
+/**
+ * 
+ * @returns {String}
+ */
 const createUUID = () => {
   let uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
     /[xy]/g,
@@ -34,13 +40,12 @@ const createUUID = () => {
  * @prop {String} title
  * @prop {String} urgency
  * @prop {String} type
- * @prop {Date} [due]
- * @prop {Boolean} Completed
+ * @prop {String} [due]
+ * @prop {Boolean} completed
  */
 
 /**
- * @typedef {Object.<string, Tasks>} State
- * @prop {Tasks} task
+ * @typedef {Object} State
  */
 export const State = {};
 
@@ -50,7 +55,7 @@ export const State = {};
  * @param {Object} task
  */
 export const addTaskToState = (state, task) => {
-  State[task.id] = task;
+  state[task.id] = task;
 };
 
 /**
@@ -71,3 +76,18 @@ export const createTaskObject = (data) => {
 
   return task;
 };
+
+
+/**
+ * 
+ * @param {*} param 
+ * @param {String} arg 
+ * @returns 
+ */
+export const getNode = (param, arg) =>{
+  const result = param.querySelector(`${arg}`)
+  if(!(result instanceof HTMLElement)){
+    throw new Error("Node not found in DOM")
+  }
+  return result
+}

@@ -1,3 +1,4 @@
+//@ts-check
 import {LitElement, css, html} from './libs/lit.js'
 
 class CreateButton extends LitElement{
@@ -158,6 +159,10 @@ class CreateButton extends LitElement{
           translate: y;
         }
     }`
+    /**
+     * 
+     * @returns {any}
+     */
     render(){
         return html`
         <button class="ui-btn">

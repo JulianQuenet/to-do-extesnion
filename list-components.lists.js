@@ -1,3 +1,4 @@
+//@ts-check
 import { html, LitElement, css } from "./libs/lit.js";
 import { State } from "./scripts.js";
 
@@ -197,6 +198,11 @@ class CreateTasks extends LitElement {
     return ref;
   }
 
+  
+  /**
+   * 
+   * @returns {any}
+   */
   render() {
     return html` <modal-form></modal-form>
       <section class="list-area tasks">

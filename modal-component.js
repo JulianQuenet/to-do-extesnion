@@ -1,6 +1,6 @@
+//@ts-check
 import { LitElement, html, css } from "./libs/lit.js";
-import { RATING, TYPES, createTaskObject, addTaskToState, State } from "./scripts.js";
-
+import { RATING, TYPES, createTaskObject, addTaskToState, State, getNode } from "./scripts.js";
 
 
 class CreateModal extends LitElement {
@@ -147,7 +147,10 @@ class CreateModal extends LitElement {
   }
   
   closeHandler() {
-    const form = this.shadowRoot.querySelector('#add-form');
+    const form = getNode(this.shadowRoot, "#add-form")
+    if(!(form instanceof HTMLFormElement)){
+      throw new Error("No form was found")
+    }
     form.reset()
     this.toggleOpen();
   }
@@ -170,6 +173,10 @@ class CreateModal extends LitElement {
     e.target.reset() 
   }
   
+  /**
+   * 
+   * @returns {any}
+   */
   render() {
     return html`
       <add-button @click=${this.toggleOpen} class="button"></add-button>

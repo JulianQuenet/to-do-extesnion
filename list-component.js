@@ -1,3 +1,5 @@
+//@ts-check
+
 import { LitElement, html, css } from "./libs/lit.js";
 import { State } from "./scripts.js";
 
@@ -94,6 +96,10 @@ class CreateList extends LitElement {
     this.visible = !this.visible;
   }
   
+  /**
+   * 
+   * @returns {any}
+   */
   render() {
     return html`
       <p class="count">Tasks remaining (${this.count})</p>
