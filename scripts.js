@@ -34,6 +34,11 @@ const createUUID = () => {
   return uuid;
 };
 
+//@ts-ignore
+const existingTasks = JSON.parse(localStorage.getItem('tasks')) || {}
+
+
+
 /**
  * @typedef {Object} Tasks
  * @prop {String} id
@@ -47,8 +52,7 @@ const createUUID = () => {
 /**
  * @typedef {Object} State
  */
-export const State = {
-};
+export const State = existingTasks
 
 /**
  *
@@ -100,3 +104,6 @@ export const getNode = (param, arg) =>{
 export const AppState = {
   adding: false
 }
+
+
+

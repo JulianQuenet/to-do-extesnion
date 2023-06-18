@@ -84,6 +84,8 @@ class CreateList extends LitElement {
 
   countState() {
     this.intervalId = setInterval(() => {
+      
+      localStorage.setItem('tasks', JSON.stringify(State));
       let ref = Object.entries(State).filter((task) => {
         return task[1].completed === false 
       })
@@ -123,4 +125,6 @@ class CreateList extends LitElement {
 }
 
 customElements.define("rendered-list", CreateList);
+
+
 
