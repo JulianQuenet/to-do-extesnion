@@ -2,6 +2,7 @@
 import {LitElement, css, html} from '../libs/lit.js'
 
 class CreateButton extends LitElement{
+  //CSS below-----------------------------------------------------------------------------------------------
     static styles = css`.ui-btn {
         --btn-default-bg: rgb(41, 41, 41);
         --btn-padding: 12px 16px;
@@ -159,6 +160,8 @@ class CreateButton extends LitElement{
           translate: y;
         }
     }`
+    
+    //End of CSS---------------------------------------------------------------------------------------------
     /**
      * 
      * @returns {any}

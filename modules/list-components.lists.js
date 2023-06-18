@@ -179,8 +179,8 @@ class CreateTasks extends LitElement {
     }
   `; //End of CSS-------------------------------------------------------------------
 
-  static properties = {
-    priority: { type: Array },
+  static properties = { 
+    priority: { type: Array }, // Keeps track of tasks according to urgency and if dragged
     important: { type: Array },
     normal: { type: Array },
     completed: { type: Array },
@@ -233,7 +233,7 @@ class CreateTasks extends LitElement {
   }
 
   taskCompleted = (e) => {
-    // Gets the id of the task and updates the State on the tasks Status
+    // Gets the id of the task and updates the State on the tasks Status (changes completed to true)
     const id = e.target.closest(".task-box").id;
     State[id].completed = true;
   };
@@ -290,7 +290,7 @@ class CreateTasks extends LitElement {
     return ref;
   }
   //All dragging events below----------------------------------------------------------------
-  startDrag(e) {
+  startDrag(e) { //Normal dragging logic nothing fancy 
     e.stopPropagation();
     this.dragged = e.target;
   }

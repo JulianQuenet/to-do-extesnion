@@ -1,12 +1,14 @@
 //@ts-check
 
-export const RATING = {
+export const RATING = { //Object to store the urgency ratings
   priority: "High",
   important: "Medium",
   normal: "Low",
 };
 
-export const TYPES = {
+
+//Stores the task types option, when form is submitted the relevant emoji code is retrieved and used
+export const TYPES = { 
   "&#128203;": "Normal",
   "&#128187;": "Work",
   "&#128218;": "Studies",
@@ -35,7 +37,7 @@ const createUUID = () => {
 };
 
 //@ts-ignore
-const existingTasks = JSON.parse(localStorage.getItem('tasks')) || {}
+const existingTasks = JSON.parse(localStorage.getItem('tasks')) || {} //Gets the saved tasks else returns {}
 
 
 
@@ -52,10 +54,10 @@ const existingTasks = JSON.parse(localStorage.getItem('tasks')) || {}
 /**
  * @typedef {Object} State
  */
-export const State = existingTasks
+export const State = existingTasks //Will either be the saved tasks or an empty {}
 
 /**
- *
+ *Updates the STate
  * @param {State} state
  * @param {Object} task
  */
@@ -64,7 +66,7 @@ export const addTaskToState = (state, task) => {
 };
 
 /**
- *
+ *Used to create a task object from the data retrieved from the form 
  * @param {Object} data
  * @returns {Tasks}
  */
@@ -84,7 +86,7 @@ export const createTaskObject = (data) => {
 
 
 /**
- * 
+ * Basic function to get an HTMLElement
  * @param {*} param 
  * @param {String} arg 
  * @returns 
@@ -98,6 +100,7 @@ export const getNode = (param, arg) =>{
 }
 
 /**
+ * Keeps tracking of the adding state
  * @typedef {Object} AppState
  * @prop {Boolean} adding
  */

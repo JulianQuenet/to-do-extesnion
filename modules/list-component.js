@@ -5,7 +5,8 @@ import { State, AppState } from "../scripts.js";
 
 
 class CreateList extends LitElement {
-  static styles = css`
+  //CSS below--------------------------------------------------------------------------------------------
+  static styles = css` 
     * {
       box-sizing: border-box;
       padding: 0;
@@ -60,10 +61,11 @@ class CreateList extends LitElement {
       animation: enter 0.8s ease-in-out both;
     }
   `;
+  //End of CSS-----------------------------------------------------------------------------------------------
+  
   static properties = {
-    visible: { type: Boolean, state: false },
-    state: { type: Object },
-    count: {type: Number}
+    visible: { type: Boolean, state: false },//Handles min/maximizing the app
+    count: {type: Number}//Used to keep track of tasks
   };
 
   constructor() {
@@ -85,11 +87,11 @@ class CreateList extends LitElement {
   countState() {
     this.intervalId = setInterval(() => {
       
-      localStorage.setItem('tasks', JSON.stringify(State));
+      localStorage.setItem('tasks', JSON.stringify(State));//Gets the tasks from the State and save them
       let ref = Object.entries(State).filter((task) => {
         return task[1].completed === false 
       })
-      this.count = ref.length
+      this.count = ref.length //Count is equal to the amount of tasks not completed
     }, 100);
   }
 
@@ -97,7 +99,7 @@ class CreateList extends LitElement {
     clearInterval(this.intervalId);
   }
   
-  toggleHidden() {
+  toggleHidden() {//Function to handles the boolean value of this.visible
     if(AppState.adding === true) return
     this.visible = !this.visible;
   }
@@ -106,7 +108,7 @@ class CreateList extends LitElement {
    * 
    * @returns {any}
    */
-  render() {
+  render() {//HTML below---------------------------------------------------------------------------------------
     return html`
       <p class="count">Tasks remaining (${this.count})</p>
       <div class="top">
@@ -121,7 +123,7 @@ class CreateList extends LitElement {
         <tasks-add></tasks-add>
       </main>
     `;
-  }
+  }//End of HTML----------------------------------------------------------------------------------------------
 }
 
 customElements.define("rendered-list", CreateList);

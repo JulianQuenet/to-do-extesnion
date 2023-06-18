@@ -4,6 +4,7 @@ import { RATING, TYPES, createTaskObject, addTaskToState, State, getNode, AppSta
 
 
 class CreateModal extends LitElement {
+  //CSS below-------------------------------------------------------------------------------------
   static styles = css`
     * {
       box-sizing: border-box;
@@ -127,11 +128,12 @@ class CreateModal extends LitElement {
     }
     
   `;
+  //End of CSS-------------------------------------------------------------------------------------------
 
   static properties = {
-    open: { type: Boolean, state: false },
-    class: { type: String },
-    message: {type: String},
+    open: { type: Boolean, state: false },//Used to apply logic to open/close the modal
+    class: { type: String },//Class used to blur out background i.e. ('.block')
+    message: {type: String},//Message shown if invalid form input
   };
 
   constructor() {
@@ -141,13 +143,13 @@ class CreateModal extends LitElement {
     this.message = ""
   }
   
-  toggleOpen() {
+  toggleOpen() {//Opens and closes the modal, and changes the adding state
     AppState.adding = !AppState.adding
     this.open = !this.open;
     this.class === "block" ? (this.class = "") : (this.class = "block");
   }
   
-  closeHandler() {
+  closeHandler() {//closes the form with the help of toggleOpen()
     const form = getNode(this.shadowRoot, "#add-form")
     if(!(form instanceof HTMLFormElement)){
       throw new Error("No form was found")
@@ -156,7 +158,7 @@ class CreateModal extends LitElement {
     this.toggleOpen();
   }
   
-  submitHandler(e){
+  submitHandler(e){//Used to create a task object out of the form data and update the State
     e.preventDefault()
     const data = new FormData(e.target)
     const formatData = Object.fromEntries(data)
@@ -178,7 +180,7 @@ class CreateModal extends LitElement {
    * 
    * @returns {any}
    */
-  render() {
+  render() {//HTML below-----------------------------------------------------------------------------------
     return html`
       <add-button @click=${this.toggleOpen} class="button"></add-button>
       <div class=${this.class}></div>
@@ -188,13 +190,13 @@ class CreateModal extends LitElement {
         <label>Task title <span id=msg>${this.message}</span></label>
         <input name=title type=text >
         <label>Urgency</label>
-        <select required name=urgency>${Object.entries(RATING).map(
+        <select required name=urgency>${Object.entries(RATING).map(//Creates options for the form 
           ([key, value]) => html` <option value="${key}">${value}</option> `
         )}<select>
         <label>Due date <span>(Optional)</span></label>
         <input name=due type=date>
         <label>Task type</label>
-        <select name=type >${Object.entries(TYPES).map(
+        <select name=type >${Object.entries(TYPES).map(// Also creates options for the form
           ([key, value]) => html` <option value="${key}">${value}</option> `
         )}<select>
             
@@ -206,6 +208,7 @@ class CreateModal extends LitElement {
         
       </form></dialog>
     `;
+    //End of HTML--------------------------------------------------------------------------------------------
   }
 }
 
