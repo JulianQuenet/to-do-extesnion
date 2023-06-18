@@ -169,6 +169,14 @@ class CreateModal extends LitElement {
       }, 1000);
       return
     }
+    //@ts-ignore
+    if(formatData.title.length > 25){
+      this.message = "Max length is 25 characters"
+      setTimeout(() => {
+        this.message = ''; // Reset the value to an empty string
+      }, 2000);
+      return
+    }
     const formatTaskData = createTaskObject(formatData)
     addTaskToState(State, formatTaskData)
     this.toggleOpen()

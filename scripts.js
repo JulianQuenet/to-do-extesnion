@@ -76,7 +76,7 @@ export const createTaskObject = (data) => {
     id: createUUID(),
     title,
     urgency,
-    due: due || "",
+    due: due? `For: ${due}` : "" ,
     type,
     completed: false,
   };

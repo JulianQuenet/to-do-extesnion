@@ -141,7 +141,9 @@ class CreateTasks extends LitElement {
 
     .status {
       display: flex;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       font-size: 0.8rem;
     }
 
@@ -276,14 +278,16 @@ class CreateTasks extends LitElement {
             ${typeEmoji}
             <div class="name">${task[1].title}</div>
           </div>
-          <div class="due">${task[1].due}</div>
           <div class="status">
+          <div class="due">${task[1].due}</div>
+            <div>
             Completed:<button
               @click=${this.taskCompleted}
               class="status-button"
             >
               Nope
             </button>
+      </div>
           </div>
         </div>`;
       });
