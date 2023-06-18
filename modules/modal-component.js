@@ -142,7 +142,7 @@ class CreateModal extends LitElement {
   }
   
   toggleOpen() {
-    AppState.adding = true
+    AppState.adding = !AppState.adding
     this.open = !this.open;
     this.class === "block" ? (this.class = "") : (this.class = "block");
   }
