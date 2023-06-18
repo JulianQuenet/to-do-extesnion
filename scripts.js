@@ -47,7 +47,8 @@ const createUUID = () => {
 /**
  * @typedef {Object} State
  */
-export const State = {};
+export const State = {
+};
 
 /**
  *
@@ -90,4 +91,12 @@ export const getNode = (param, arg) =>{
     throw new Error("Node not found in DOM")
   }
   return result
+}
+
+/**
+ * @typedef {Object} AppState
+ * @prop {Boolean} adding
+ */
+export const AppState = {
+  adding: false
 }

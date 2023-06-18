@@ -1,7 +1,7 @@
 //@ts-check
 
 import { LitElement, html, css } from "../libs/lit.js";
-import { State } from "../scripts.js";
+import { State, AppState } from "../scripts.js";
 
 
 class CreateList extends LitElement {
@@ -96,6 +96,7 @@ class CreateList extends LitElement {
   }
   
   toggleHidden() {
+    if(AppState.adding === true) return
     this.visible = !this.visible;
   }
   

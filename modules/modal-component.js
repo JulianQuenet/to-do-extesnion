@@ -1,6 +1,6 @@
 //@ts-check
 import { LitElement, html, css } from "../libs/lit.js";
-import { RATING, TYPES, createTaskObject, addTaskToState, State, getNode } from "../scripts.js";
+import { RATING, TYPES, createTaskObject, addTaskToState, State, getNode, AppState } from "../scripts.js";
 
 
 class CreateModal extends LitElement {
@@ -142,6 +142,7 @@ class CreateModal extends LitElement {
   }
   
   toggleOpen() {
+    AppState.adding = true
     this.open = !this.open;
     this.class === "block" ? (this.class = "") : (this.class = "block");
   }
@@ -170,6 +171,7 @@ class CreateModal extends LitElement {
     addTaskToState(State, formatTaskData)
     this.toggleOpen()
     e.target.reset() 
+    AppState.adding = false
   }
   
   /**
