@@ -146,6 +146,13 @@ class CreateTasks extends LitElement {
       justify-content: center;
       font-size: 0.8rem;
     }
+    
+    .completed-status{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
 
     .status-button {
       border: none;
@@ -225,7 +232,7 @@ class CreateTasks extends LitElement {
               <div class="name">${task[1].title}</div>
             </div>
             <div class="due">${task[1].due}</div>
-            <div class="status">
+            <div class="completed-status">
               Completed:
               <p class="fin">Jip</p>
             </div>
