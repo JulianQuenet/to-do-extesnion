@@ -94,7 +94,7 @@ export const createTaskObject = (data) => {
 export const getNode = (param, arg) =>{
   const result = param.querySelector(`${arg}`)
   if(!(result instanceof HTMLElement)){
-    throw new Error("Node not found in DOM")
+    throw new Error(`${arg} not found in DOM`)
   }
   return result
 }
