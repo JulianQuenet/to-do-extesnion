@@ -9,3 +9,5 @@ Created this extension as a side project for fun and to play around with the lit
 - In the top left corner there is a task counter to keep track of all incomplete tasks
 - If it is desired a task can be deleted by dragging it over to the delete box where it will be removed.
 - The tasks list can be minimized and maximized by clicking on the to-do logo, however it won't perform this action when adding a new task.
+
+Deployed to Github pages for reference: https://julianquenet.github.io/to_do_extesnion/
